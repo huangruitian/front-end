@@ -1,0 +1,9 @@
+// babel 配置文件
+{
+    "presets":[  //预设，@babel/preset-env预设会用到 .browserslistrc
+       "@babel/preset-env" //这个预设可以让你写最新版的JS代码，无需担心版本问题
+    ],
+    "plugins": [ //插件
+
+    ]
+}

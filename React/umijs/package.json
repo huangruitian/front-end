@@ -1,0 +1,17 @@
+{
+  "name": "umijs",
+  "version": "1.0.0",
+  "description": "- 插件化\r - 开箱即用\r - 约定式路由\r - https://umijs.org/zh-CN\r - npm i -g umi //全局安装一下就可以umi dev 开发使用了",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "umi dev",
+    "build": "umi build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react-redux": "^7.2.0",
+    "umi-plugin-react": "^1.15.2"
+  }
+}
