@@ -1,6 +1,3 @@
-
-
-
 // var net = require("net")
 // var fs = require("fs")
 
@@ -44,10 +41,26 @@ http.createServer((req, res) => {
 
 var fs = require("fs")
 
-// 什么样的情况下用异步？什么情况下用同步？
-// 烧开水 和 洗脸，如果两件事情没有必然联系的话，用异步
+//页面加载就设置html大小
+(
+   function (doc, win, designWidth) {
+      var html = document.documentElement;
+      // var dpr = win.devicePixelRatio;
+      function refreshRem() {
+         const clientWidth = html.clientWidth;
+         if (clientWidth >= designWidth) {
+            html.style.fontSize = "100px";
+         } else {
+            // 目的是以iphone6为基准，为什么拿它?
+            // 因为dpr到达2.0用户的肉眼已经分辨不出啥了，都是高清了。
+            // html.style.fontSize = 16 * clientWidth / 375 + 'px';//这种要借助dpr换算
+            html.style.fontSize = 100 * (clientWidth / designWidth) + 'px';
+            //上面这种方式可以直接根据设计稿的大小除以100得到rem的大小                      
+         }
+      };
+      //dom节点加载完成运行
+      doc.addEventListener('DOMContentLoaded', refreshRem);
+   }
+)(document, window, 750); //750为基准，可以灵活设置
 
-// 同步写文件
-fs.writeFileSync()
-// 异步写文件
-fs.writeFile()
+var socket = WebSocket

@@ -227,3 +227,91 @@ console.log(getPhoneList(arr))
 // let a = [...new Set([2, 2])]
 
 // ==========================
+// 2020-3-17 面试
+// 输入
+// They are students. 
+// aeiou
+
+// 输出
+// Thy r stdnts.
+
+const deleteFlagStr = (origin = "They are students.", target = "aeiou") => {
+  const hash = new Set()
+  let result = ''
+  for (let i = 0; i < target.length; i++) {
+    hash.add(target[i])
+  }
+  for (let i = 0; i < origin.length; i++) {
+    if (!hash.has(origin[i])) {
+      result += origin[i]
+    }
+  }
+  return result
+}
+
+let arrStr = [
+  ["今", "天", "上", "一", "新", "影"],
+  ["晚", "我", "起", "上", "《", "》"],
+  ["们", "去", "映", "流", "好", "听"],
+  ["看", "的", "浪", "不", "小", "非"],
+  ["电", "地", "好", "李", "常", "得"],
+  ["球", "？", "说", "值", "看", "！"]
+]
+// 0 0 / 01 10 / 02 11 20 / 03 12 21 30 
+// 15 24  33 42 51
+const getStr = (arr = arrStr) => {
+  let result = ''
+  let row = arr.length
+  for(let i = 0; i < row; i++){
+    for(let j = 0; j <= i; j++){
+      result += arr[j][i - j]
+    }
+  }
+  // 15 24  33 42 51
+  // 25 34  43 52
+  // 35 44  53
+  // 45 54
+  // 55
+  for(let i = 1; i < row; i++){
+    let k = 0
+    for(let j = row - 1; j >= i; j--){
+      // console.log(i,j)
+      result += arr[i + k][j]
+      k++
+    }
+  }
+  return result
+}
+
+
+const threeSum = (nums) => {
+  const result = [];
+  nums.sort((a, b) => a - b);
+  for (let i = 0; i < nums.length; i++) {
+    // 跳过重复数字
+    if (i && nums[i] === nums[i - 1]) {
+      continue;
+    }
+    let left = i + 1;
+    let right = nums.length - 1;
+    while (left < right) {
+      const sum = nums[i] + nums[left] + nums[right];
+      if (sum > 0) {
+        right--;
+      } else if (sum < 0) {
+        left++;
+      } else {
+        result.push([nums[i], nums[left++], nums[right--]]);
+        // 跳过重复数字
+        while (nums[left] === nums[left - 1]) {
+          left++;
+        }
+        // 跳过重复数字
+        while (nums[right] === nums[right + 1]) {
+          right--;
+        }
+      }
+    }
+  }
+  return result;
+}

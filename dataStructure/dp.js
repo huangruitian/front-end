@@ -1251,7 +1251,7 @@ var maximalSquare = function (matrix) {
   let dp = getArrFillTag(row, col, 0)
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < matrix[i].length; j++) {
-      if(matrix[i][j] == '1'){
+      if (matrix[i][j] == '1') {
         tag = 1
       }
       dp[i][j] = +matrix[i][j];
@@ -1281,17 +1281,17 @@ function getArrFillTag(row = 1, col = 1, tag = 0) {
  * @param {number[]} nums
  * @return {number}
  */
-var lengthOfLIS = function(nums) {
-    let len = nums.length
-    let dp = Array(len).fill(1)
-    for(let i = 1; i < len; i++){
-      for(let j = 0; j <= i; j++){
-        if(nums[i] > nums[j]){
-          dp[i] = Math.max(dp[j], dp[j] + 1)
-        }
+var lengthOfLIS = function (nums) {
+  let len = nums.length
+  let dp = Array(len).fill(1)
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j <= i; j++) {
+      if (nums[i] > nums[j]) {
+        dp[i] = Math.max(dp[j], dp[j] + 1)
       }
     }
-    return Math.max(...dp)
+  }
+  return Math.max(...dp)
 };
 
 /**
@@ -1305,23 +1305,24 @@ var lengthOfLIS = function(nums) {
  * @param {TreeNode} root
  * @return {number}
  */
-var longestUnivaluePath = function(root) {
-    let res = 0
-    helper(root);
-    function helper(root){
-      if(!root) return 0;
-      let left = helper(root.left);
-      let right = helper(root.right);
-      if(root.left && root.left.val == root.val){
-        left++
-      }
-      if(root.right && root.right.val == root.val){
-        right++
-      }
-      
+var longestUnivaluePath = function (root) {
+  let res = 0
+  helper(root);
 
-      return Math.max(right, left)
+  function helper(root) {
+    if (!root) return 0;
+    let left = helper(root.left);
+    let right = helper(root.right);
+    if (root.left && root.left.val == root.val) {
+      left++
     }
-    return res
+    if (root.right && root.right.val == root.val) {
+      right++
+    }
+
+
+    return Math.max(right, left)
+  }
+  return res
 };
 
