@@ -195,3 +195,112 @@ fs.writeFile()
 - 非关系型数据库，一般是key-value 结构，大多数都是存在内存上，速度相对较快
 - 302 是浏览器跳转，表示重定向
 - 写cookie 一般是后端返回response，Set-Cookie
+
+# 后端常用功能
+- 自动登录，读写cookie
+- 文件下载和上传
+- 页面跳转，读取文件
+- 数据上传，写数据库
+- 数据拉取，读数据库
+
+# node 专属的三类全局对象
+1. process，管理进程的，Buffer二进制数据流，处理文件，__filename 和 __dirname，文件路径和目录路径
+2. Data之类的ES标准的对象
+3. 实现方式不同的共有全局对象：console 和 setTimeout
+
+# node 异步非阻塞
+- 定时器并不会阻塞程序的运行，Hello World! 会延迟三秒输出
+- 在实际的应用环境中，往往有很多 I/O 操作（例如网络请求、数据库查询等等）需要耗费相当多的时间，
+- 而 Node.js 能够在等待的同时继续处理新的请求，大大提高了系统的吞吐率。
+```js
+    setTimeout(() => {
+    console.log('Hello World!');
+    }, 3000);
+    
+    console.log('当前进程 ID', process.pid);
+    console.log('当前脚本路径', __filename);
+    
+    const time = new Date();
+    console.log('当前时间', time.toLocaleString());
+```
+
+# node 模块机制
+- 模块化的意义？
+- 开发人员应使用通过定义明确的接口连接的简单零件来构建程序，因此问题是局部的，可以在将来的版本中替换程序的某些部分以支持新功能。 该规则旨在节省调试复杂、冗长且不可读的复杂代码的时间。
+- “分而治之” 的思想在计算机的世界非常普遍，但是在 ES2015 标准出现以前都是通过引入标签的方式模块化<script>
+- 这样的模块化会带了一些问题
+1. 多个脚本的引入导致命名冲突
+2. 多个脚本之间互相访问困难
+3. 导入的脚本无法轻易的檫除或者修改
+
+# 模块化标准的诞生
+- AMD 在浏览器端使用较为广泛
+- CommonJS，node实现的模块化标准
+
+# node 模块分为两大类
+1. 系统内置核心模块，一般是一些比较常用和基础的功能
+2. 文件模块，用户编写的
+
+- 其中，文件模块可以是一个单独的文件（以 .js、.node 或 .json 结尾），或者是一个目录。
+- 当这个模块是一个目录时，模块名就是目录名，有两种情况：
+1. 目录中有一个 package.json 文件，则这个 Node 模块的入口就是其中 main 字段指向的文件；
+2. 目录中有一个名为 index 的文件，扩展名为 .js、.node 或 .json，此文件则为模块入口文件。
+
+# node 模块浅析
+具体而言，Node 引入了三个新的全局对象（还是 Node 专属哦）：
+1. require
+- 直接写文件名称或者模块名称，可以省略js后缀，不推荐绝对路径写法
+- 内置模块实际上每个模块都有个路径搜索列表 module.paths
+
+2. exports 
+- exports.add = add;
+- 使用的时候可以简单粗暴ES6结构拿
+
+3. module
+- 每个内置模块，或者自定义模块
+- 之前的 **exports** 对象是指向 **module.exports** 的引用；所以推荐使用**module.exports**
+```js
+// 导出 add 函数
+exports.add = add;
+// 和上面一行代码是一样的
+module.exports.add = add;
+
+// 另一种引入方式，这种是直接令exports对象为add函数
+module.exports = add;
+```
+- tips:直接写 exports = add; 无法导出 add 函数，因为 exports 本质上是指向 module 的 exports 属性的引用，
+- 直接对 exports 赋值只会改变 exports，对 module.exports 没有影响。
+- 如果你觉得难以理解，那我们用 apple 和 price 类比 module 和 exports：
+```js
+    apple = { price: 1 };   // 想象 apple 就是 module
+    price = apple.price;    // 想象 price 就是 exports
+    apple.price = 3;        // 改变了 apple.price
+    price = 3;              // 只改变了 price，没有改变 apple.price
+```
+
+# node指令式开发
+- 输入node 命令的时候，可以输入些参数；process.argv可以获取
+- 但是这样的开发方式非常的固定，死板
+
+# npm，洪荒之力，都赐予你
+- npm 包管理工具，下载node的时候会自动附带
+- npm 集中式依赖仓库，存放了其它js开发者分享的npm包
+- npm 网站，可以搜索需要的npm包、管理npm帐号
+
+- npm init 初始化项目
+- 这时候 npm 会提一系列问题，你可以一路回车下去，也可以仔细回答；
+- 最终会创建一个 package.json 文件。package.json 文件是一个 npm 项目的核心，记录了这个项目所有的关键信息；
+- npm i -D 或 --save-dev 选项，代表 eslint 是一个开发依赖，在实际项目发布或部署时不需要用到。npm 会把所有开发依赖添加到 devDependencies 字段中，而不是项目的直接依赖
+
+# package.json
+- dependencies 直接依赖，依赖里面的版本问题，如果写成指定的数字，就是指定版本；还可以写成 * 或 x，那么直接安装最新版本（不推荐），或者 react:16.x 这样指定一个大的版本
+- scripts 为脚本，npm run 脚本
+
+# node 的异步世界
+- 回调函数和事件机制共同组成了 Node 的异步世界。
+- 具体而言，Node 中的事件都是通过 events 核心模块中的 EventEmitter 这个类实现的。EventEmitter 包括两个最关键的方法：
+1. on：用来监听事件的发生
+2. emit：用来触发新的事件
+- 可以说，Node 中很多对象都继承自 EventEmitter，包括我们熟悉的 process 全局对象。
+
+# express koa

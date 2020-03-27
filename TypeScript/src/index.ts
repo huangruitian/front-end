@@ -31,3 +31,13 @@ let c:IUser = {
  }
 let s = c.sayHello
 s() //接口强约束了this指向，这样用会报错
+
+
+interface F<T> {
+    (...args:T[]):T
+}
+
+const m:F<string> = (foo) => {
+  
+    return foo
+}

@@ -131,14 +131,16 @@ let tableData = [{
 
 const getPhoneList = (arr) => {
   const res = []
-  arr = arr.map(item => ({ [item.id]: item.value }))
-           .filter(item => {
-              const key = Object.keys(item)[0]
-              if (item[key].length) {
-                return true
-              }
-              return false
-           })
+  arr = arr.map(item => ({
+      [item.id]: item.value
+    }))
+    .filter(item => {
+      const key = Object.keys(item)[0]
+      if (item[key].length) {
+        return true
+      }
+      return false
+    })
   const backtrack = (arr, tempObj, set, idx) => {
     let str = Object.values(tempObj).join('')
     // 加入条件   
@@ -257,24 +259,17 @@ let arrStr = [
   ["电", "地", "好", "李", "常", "得"],
   ["球", "？", "说", "值", "看", "！"]
 ]
-// 0 0 / 01 10 / 02 11 20 / 03 12 21 30 
-// 15 24  33 42 51
 const getStr = (arr = arrStr) => {
   let result = ''
   let row = arr.length
-  for(let i = 0; i < row; i++){
-    for(let j = 0; j <= i; j++){
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j <= i; j++) {
       result += arr[j][i - j]
     }
   }
-  // 15 24  33 42 51
-  // 25 34  43 52
-  // 35 44  53
-  // 45 54
-  // 55
-  for(let i = 1; i < row; i++){
+  for (let i = 1; i < row; i++) {
     let k = 0
-    for(let j = row - 1; j >= i; j--){
+    for (let j = row - 1; j >= i; j--) {
       // console.log(i,j)
       result += arr[i + k][j]
       k++
@@ -315,3 +310,35 @@ const threeSum = (nums) => {
   }
   return result;
 }
+
+
+// 最大值，没一行选一个，列不能相同
+let R = [
+  [4, 1, 1, 3],
+  [1, 1, 3, 1],
+  [1, 3, 1, 1],
+  [3, 1, 1, 3],
+]
+let result = 0
+
+function backtrack(arr, sum, set, idx) {
+  const Len = arr.length;
+  // 加入条件   
+  if (idx === Len) {
+    result = result > sum ? result : sum
+  } else {
+    for (let i = idx; i < Len; i++) {
+      for (let j = 0; j < Len; j++) {
+        if (set.has(j)) continue;
+        set.add(j)
+        sum += arr[i][j]
+        // 每组选一个
+        backtrack(arr, sum, set, idx + 1)
+        // 选完回溯
+        sum -= arr[i][j]
+        set.delete(j)
+      }
+    }
+  }
+}
+backtrack(R, 0, new Set(), 0)

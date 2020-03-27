@@ -829,8 +829,73 @@ function isHasIDown(chi: object): chi is IDown {
     type person5 = Pick<Person, "name">;
 //  person5 === {name: string}
 ```
-10. Omit
+10. Omit 忽略对象某些属性功能
+```type Omit<T, K> = Pick<T, Exclude<keyof T, K>>```
 - Omit<T, K extends keyof any>，在T中选择除了K的类型，keyof any 表示任何类型
+- 在泛型里面 ```extends``` 关键字是约束的意思，不是继承
+
+11. Record 将 K 中所有的属性的值转化为 T 类型
+```type Record<K extends keyof any, T> = { [P in K]: T };```
+- keyof any表示可以用作对象索引的任何值的类型。
+- 在Record类型中，这 K extends keyof any 用于约束K某些对象，该对象是对象的有效键。所以，K目前为 number string symbol 三种
+
+12. AxiosReturnType (未包含)
+开发经常使用 axios 进行封装 API层 请求, 通常是一个函数返回一个 AxiosPromise<Resp>, 现在我想取到它的 Resp 类型, 根据上一个工具泛型的知识我们可以这样写.
+```js
+  import { AxiosPromise } from 'axios' // 导入接口
+  type AxiosReturnType<T> = T extends (...args: any[]) => AxiosPromise<infer R> ? R : any
+  // 使用
+  type Resp = AxiosReturnType<Api> // 泛型参数中传入你的 Api 请求函数
+```
+
+13. Exclude 
+- T extends U ? X : Y
+- 以上语句的意思就是 如果 T 是 U 的子类型的话，那么就会返回 X，否则返回 Y
+- 甚至可以组合多个
+```js
+  type TypeName<T> =
+    T extends string ? "string" :
+    T extends number ? "number" :
+    T extends boolean ? "boolean" :
+    T extends undefined ? "undefined" :
+    T extends Function ? "function" :
+    "object";
+```
+14. 去掉可能为空的属性键名
+- https://mariusschulz.com/blog/conditional-types-in-typescript 强推好文
+- never 为TS内置的不可达类型，就是没有意义，不可达
+```js
+    type NonNullablePropertyKeys<T> = {
+      //[P in keyof T]，p是T的所有属性，null extends T[P] ? never : P，约束属性值必须不为null
+      [P in keyof T]: null extends T[P] ? never : P
+      // 得到结果：
+      // name: "name";
+      // email: never;
+      // [keyof T]，A[B]的意思，由于never没有意义，所以只会拿出 "name"
+    }[keyof T]; 
+
+    type User = {
+      name: string;
+      email: string | null;
+    };
+    // "name"
+    type NonNullableUserPropertyKeys = NonNullablePropertyKeys<User>;
+    // 配合Pick<T, U>, 就可以选择属性不为空的类型别名
+    type NonNullableProperties<T> = Pick<T, NonNullablePropertyKeys<T>>;
+    // { name: string }
+    type NonNullableUserProperties = NonNullableProperties<User>;
+```
+
+15. 得到一个元组类型，元组类型是函数所有形参的类型
+```js
+/**
+ * Obtain the parameters of a function type in a tuple
+ */
+type Parameters<T extends (...args: any[]) => any> =
+  T extends (...args: infer P) => any
+    ? P
+    : never;
+```
 
 # 声明文件
 1. 什么是声明文件？
