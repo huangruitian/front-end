@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* https://juejin.im/post/58e3a5a0a0bb9f0069fc16bb#heading-0 */
+        body{
+            border: 1px solid red;
+        }
+
+        #dad{ /* 父容器 */
+            width: 600px;
+            height: 400px;
+            background-color: bisque;
+            display: flex;
+            /* 交叉辅轴（Y）居中，y轴居中 */
+            align-items: center;  
+            /* 主轴（X）居中，x轴居中 */
+            /* justify-content: space-between;  */
+        }
+
+        #child{ /* 子容器 */
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+
+        #child2{ /* 子容器 */
+            background-color: green;
+        }
+        
+        #span{ /* 子容器 */
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="dad">
+       <div id="child">
+         child
+       </div>
+       <div id="child2">
+         child2
+      </div>
+      <span id="span">
+        span 文本
+     </span>
+    </div>
+</body>
+</html>

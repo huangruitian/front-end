@@ -1,10 +1,18 @@
 # 为什么要使用TS？
 - 获得更好的开发体验，解决JS中一些难以解决的问题
-
+```
+  const findUserName = (arr, name) => {
+     let result = arr.filters(item => {
+        return name === item.name
+     })
+  }
+  findUserNmae(arr, 'hrt') 
+```
 # JS存在的问题：
 1. 使用了不存在的变量函数或者成员（函数名字写错等等）
 2. 函数返回类型不准确，无法预知的类型。（把不确定的类型，当成确定的类型）
 3. 在使用null或者undefined成员
+4. 代码的 可阅读性 和 可维护性
 
 # js的原罪
 1. js语言本身的特性，决定了该语言无法适应大型复杂项目
@@ -112,7 +120,7 @@
 
 # 类型别名：对已知的类型定义别名
 - 这个react会经常用到
-- type User = user: {
+- type User = {
    name:string
    age:number
 }
@@ -121,12 +129,12 @@
 
 # 甚至还可以类型组合
 ```javascript
-   type Gender = '男' | '女'
-   type User = user: {
-      name:string
-      age:number
-      gender:Gender //这样可以很方便的维护代码，代码重用
-   }
+type Gender = '男' | '女'
+type User = user: {
+  name:string
+  age:number
+  gender:Gender //这样可以很方便的维护代码，代码重用
+}
 ```
 
 # 函数的相关约束
@@ -147,6 +155,11 @@
 ```
 - 可选参数：在某些参数后面加上问号，代表可选参数，不仅在函数（要放末尾）中可以使用，其它地方也可以
 - 函数默认值：像ES6 一样可以直接在参数上面写默认参数
+```js
+  function combine(a:number = 1, b?:number):number {
+       return a + 0
+  }
+```
 
 # 扩展类型-枚举
 - 枚举类型可以很好的避免硬编码
@@ -158,12 +171,13 @@
 -   解决：使用type类型别名，就可以解决了，但是，如果一旦别名类型一改，全部的代码都要改
 -   举例：
 ```javascript
-   type Gender = '男' | '女'
-   let gender:Gender;
-       gender = '男' //这里只能选字面量的值
-   //    ......如果Gender改了，gender后面甚至更多的都要改
-   //根源是真实的值和逻辑含义产生了混淆，没有分开。真实值一改，全要改了。
-   //字面量类型不会进入到编译结果
+type Gender = '男' | '女'
+let gender:Gender;
+    gender = '男' //这里只能选字面量的值
+//我们假设后面还有 N 多个变量使用类型别名Gender
+//......如果Gender改了，gender后面甚至更多的都要改
+//根源是真实的值和逻辑含义产生了混淆，没有分开。真实值一改，全要改了。
+//字面量类型不会进入到编译结果
 ```
 # 枚举：自定义类型，扩展类型
 - 枚举类型可以很好的解决上面硬编码的问题
@@ -417,11 +431,15 @@
         // 利用private控制，getAge() 是java的做法
         // C# 是这样做的 get age，用的时候就像普通对象的获取
         // ES6 的时候，也是这样玩的，其实这样也相当于是readonly
-        // 规范，写私有属性的时候尽量前面加下划线
+        // C# 规范，写私有属性的时候尽量前面加下划线
         get age(){
             return this._age
         }
         set age(age: number){
+            // 类的属性，要受一定的限制控制
+            if(age >= 18 ){
+              return
+            }
             this._age = age
         }
     }
