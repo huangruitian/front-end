@@ -938,6 +938,164 @@ type Parameters<T extends (...args: any[]) => any> =
 
 - external 打包文件太大可以配置外部依赖
 
+# 2020-04-06 二次学习TS的一些坑
+1. 如果TS配置了可以识别JSX语法的话，类型断言只能使用as 语法，不能使用尖括号
+```ts
+function extend<T extends object, U extends object>(first: T, second: U): T & U {
+  const result = <T & U>{};
+  for (let id in first) {
+    // 如果TS配置了可以识别JSX语法，这里是会报错的
+    (<T>result)[id] = first[id];
+  }
+  for (let id in second) {
+    if (!result.hasOwnProperty(id)) {
+      (<U>result)[id] = second[id];
+    }
+  }
+  return result;
+}
+const x = extend({ a: 'hello' }, { b: 42 });
+```
+
+# 允许使用额外的属性
+- 在React antd 中会经常使用到；
+```ts
+let x: { foo: number, [x: string]: any };
+
+x = { foo: 1, baz: 2 }; // ok, 'baz' 属性匹配于索引签名
+```
+
+# 自定义类型保护函数
+```ts
+// 仅仅是一个 interface
+interface Foo {
+  foo: number;
+  common: string;
+}
+
+interface Bar {
+  bar: number;
+  common: string;
+}
+
+// 用户自己定义的类型保护！
+// 使用的时候就知道具体是什么类型了
+function isFoo(arg: Foo | Bar): arg is Foo {
+  return (arg as Foo).foo !== undefined;
+}
+```
+
+# 枚举类型
+- 自定义枚举类型 ```{ [K in T]: K }``` 返回类型，索引签名
+```ts
+function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
+  return o.reduce((res, key) => {
+    res[key] = key;
+    return res;
+  }, Object.create(null));
+}
+// 创建 K: V
+const Direction = strEnum(['North', 'South', 'East', 'West']);
+// 创建一个类型，这里的 typeof 是得到一个类型
+type Direction = keyof typeof Direction;
+// 简单的使用
+let sample: Direction;
+sample = Direction.North; // Okay
+sample = 'North'; // Okay
+sample = 'AnythingElse'; // ERROR!
+```
+
+# readonly 只能保证“我”不能改变属性，其它没有保证的可以改
+```ts
+  const foo: {
+    readonly bar: number;
+  } = {
+    bar: 123
+  };
+  // 这里改了
+  function iMutateFoo(foo: { bar: number }) {
+    foo.bar = 456;
+  }
+  iMutateFoo(foo);
+  console.log(foo.bar);
+```
+# TS 类型兼容，重要；
+- B 赋值给 A，如果能完成赋值，则B和A类型兼容
+- TS 总的类型兼容使用的是鸭子辩型法（子结构辩型法）
+- 什么是鸭子辩型法？
+- 目标类型需要某一些特征，赋值类型只有满足该特征即可
+1. 基本类型：完全匹配
+2. 对象类型：鸭子辩型法；因为js经常使用字面量对象，经常把一个对象当成多个类型；
+```ts
+    interface Duck {
+      sound:'gagaga'
+    }
+    const b = {
+      name:'haha',
+      sound:'gagaga' as 'gagaga'
+    }
+    // 如果直接使用字面量对象，会出现更严格的类型检查
+    // 这样的好处是，防止你直接打错属性名称了；
+    let a: Duck = {
+      name:'haha',  // 报错，更严格的类型检查
+      sound:'gagaga'// 直接字面量不用 as
+    }
+    // 鸭子辩型法，子结构辩型法，变得宽松一点了
+    let a: Duck = b
+```
+3. 函数类型：基本和js无缝衔接，很自然；主要是参数 和 返回值
+- 参数，js的数组方法都是这样的，如map, forEach；传递给目标的参数可以少，但是不可以多
+```ts
+    interface ICallBack {                  //接口约束
+         (n:number, i:number): boolean
+    }
+    function sum(numbers:number[], callBack:ICallBack){
+        let s:number = 0
+        numbers.forEach((d, i) => {
+            if(callBack(d, i)){
+              s += d
+            }
+        })
+        return s
+    }
+    // 如果TS是严格的类型检查，必须要填两个参数；
+    let addSum:number = sum([1,2,3,4,5,6], (n) => n % 2 !== 0)
+    console.log(addSum)
+```
+- 返回值，要求返回，必须返回，类型要匹配；没有要求返回你随意；
+- 理解合理性，不要死记硬背；
+
+# TS 索引签名，加强
+- js时候```对象[值]```，其实这个就是索引器，以前也叫成员表达式；TS同样支持
+- 在TS中，默认不对成员表达式做严格的类型检测；为什么呢？因为成员表达式的成员是动态的，TS不能够算出来，所有比较放松，不做严格的类型检查；如果要检查，开启 "noImplicitAny": true, 不仅仅是限制了索引器；这是一个更严格的类型检查；
+- tip：索引器的范围很广，如果是类使用的，是一个通用的选项；
+- 如果某个类中使用了两种类型的索引器，两种类型的索引器类型必须匹配
+```ts
+  class A {
+    [p: number]: string //报错
+    [p: string]: number
+  }
+  // 正确的使用姿势，两个索引器的使用类型必须匹配
+  class B { }
+  class A {
+    [p: string]: object
+    [p: number]: B
+  }
+```
+- TypeScript 的索引签名必须是 string 或者 number。
+- symbols 也是有效的，TypeScript 支持它。
+
+# typeof TS中，作用于类型的时候，得到的是类型，作用于类的时候，得到的时候构造函数
+- const a:any = 'aaa'
+- const b: typeof a = 'aadadsdasdasdasd1'
+
+# infer
+- 待推断类型，这个歌语句的意思是
+- T 限制为函数类型，返回类型如果是P，就返回P，否则返回 any
+- https://jkchao.github.io/typescript-book-chinese/tips/infer.html
+```ts
+  type ReturnType<T> = T extends (...args: any[]) => infer P ? P : any;
+```
 
 
 
