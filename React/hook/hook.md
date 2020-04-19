@@ -209,9 +209,254 @@ export default function useReducer(reducer, initState, initFunc) {
 - 但是应该尽量的使用useEffect，因为它不会阻塞页面渲染，如果出现了问题，再考虑使用useLayoutEffect
 
 
+# https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/
+# 如何用useEffect模拟componentDidMount生命周期？
+```js
+  useEffect(handler, [])
+```
+虽然可以使用useEffect(fn, [])，但它们并不完全相等。和componentDidMount不一样，useEffect会捕获 props和state。所以即便在回调函数里，你拿到的还是初始的props和state。如果你想得到“最新”的值，你可以使用ref。不过，通常会有更简单的实现方式，所以你并不一定要用ref。记住，effects的心智模型和componentDidMount以及其他生命周期是不同的，试图找到它们之间完全一致的表达反而更容易使你混淆。想要更有效，你需要“think in effects”，它的心智模型更接近于实现状态同步，而不是响应生命周期事件。
 
+# 如何正确地在 useEffect 里请求数据？[] 又是什么？
+- 独立请求直接放到里面去，切记不能直接写成 async 的函数，而是在里面调用函数；
 
+# 组件的每次渲染，拿到的state和props都是当前的独立值
+```js 
+// During first render
+function Counter() {
+  const count = 0; // Returned by useState()
+  // ...
+  <p>You clicked {count} times</p>
+  // ...
+}
 
+// After a click, our function is called again
+function Counter() {
+  const count = 1; // Returned by useState()
+  // ...
+  <p>You clicked {count} times</p>
+  // ...
+}
 
+// After another click, our function is called again
+function Counter() {
+  const count = 2; // Returned by useState()
+  // ...
+  <p>You clicked {count} times</p>
+  // ...
+}
+```
+# 每一次渲染都有它自己的事件处理函数
+- 先点击三次 setCount 加到 3
+- 再点击 Show alert，然后再点击二次 setCount，alert显示的是 3，而不是 5
+```js
+function Counter() {
+  const [count, setCount] = useState(0);
+  // 每一次渲染都有它自己的事件处理函数
+  // 如果在class 组件上结果并非如此
+  function handleAlertClick() {
+    setTimeout(() => {
+      alert('You clicked on: ' + count);
+    }, 3000);
+  }
 
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+      <button onClick={handleAlertClick}>
+        Show alert
+      </button>
+    </div>
+  );
+}
+```
+# 所以实际上，每一次渲染都有一个“新版本”的handleAlertClick。
+# 每一个版本的handleAlertClick“记住” 了它自己的 count：
+```js
+// During first render
+function Counter() {
+  // ...
+  function handleAlertClick() {
+    setTimeout(() => {
+      alert('You clicked on: ' + 0);
+    }, 3000);
+  }
+  // ...
+  <button onClick={handleAlertClick} /> // The one with 0 inside
+  // ...
+}
+```
+
+# 每次渲染都有它自己的Effects
+- 先来看个例子
+```js
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+- 每次点击同样会出现相同的情况
+- React会记住你提供的effect函数，并且会在每次更改作用于DOM并让浏览器绘制屏幕后去调用它。
+```js
+// During first render
+function Counter() {
+  // ...
+  useEffect(
+    // Effect function from first render
+    () => {
+      document.title = `You clicked ${0} times`;
+    }
+  );
+  // ...
+}
+
+// After a click, our function is called again
+function Counter() {
+  // ...
+  useEffect(
+    // Effect function from second render
+    () => {
+      document.title = `You clicked ${1} times`;
+    }
+  );
+  // ...
+}
+
+// After another click, our function is called again
+function Counter() {
+  // ...
+  useEffect(
+    // Effect function from third render
+    () => {
+      document.title = `You clicked ${2} times`;
+    }
+  );
+  // ..
+}
+```
+
+- 我觉得Hooks这么依赖Javascript闭包是挺讽刺的一件事。有时候组件的class实现方式会受闭包相关的苦（the canonical wrong-value-in-a-timeout confusion）；
+- 但其实这个例子中真正的混乱来源是可变数据（React 修改了class中的this.state使其指向最新状态），并不是闭包本身的错。
+
+# 逆潮而动
+- 到目前为止，我们可以明确地喊出下面重要的事实：每一个组件内的函数（包括事件处理函数，effects，定时器或者API调用等等）会捕获某次渲染中定义的props和state。
+
+# 获取最新值的办法，用ref
+```js
+function Example() {
+  const [count, setCount] = useState(0);
+  const latestCount = useRef(count);
+  
+  useEffect(() => {
+    // Set the mutable latest value
+    latestCount.current = count;
+    setTimeout(() => {
+      // Read the mutable latest value
+      console.log(`You clicked ${latestCount.current} times`);
+  }, 3000));
+};
+```
+
+- 还可以用 reducer 的方式，不过本质上还是JS的闭包
+- 相比于直接在effect里面读取状态，它dispatch了一个action来描述发生了什么。
+- 这使得我们的effect和step状态解耦。我们的effect不再关心怎么更新状态，它只负责告诉我们发生了什么。
+- 更新的逻辑全都交由reducer去统一处理，秒用；
+- 下面是代码例子：
+```js
+import React, { useReducer, useEffect } from "react";
+import ReactDOM from "react-dom";
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { count, step } = state;
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      dispatch({ type: 'tick' });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [dispatch]);
+
+  return (
+    <>
+      <h1>{count}</h1>
+      <input value={step} onChange={e => {
+        dispatch({
+          type: 'step',
+          step: Number(e.target.value)
+        });
+      }} />
+    </>
+  );
+}
+
+const initialState = {
+  count: 0,
+  step: 1,
+};
+
+function reducer(state, action) {
+  const { count, step } = state;
+  if (action.type === 'tick') {
+    return { count: count + step, step };
+  } else if (action.type === 'step') {
+    return { count, step: action.step };
+  } else {
+    throw new Error();
+  }
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Counter />, rootElement);
+```
+- 如果reducer 依赖了props，可以把func reducer 直接放到函数组件内。
+- 因为 dispatch 的时候，React只是记住了action；它会在下一次渲染中再次调用reducer。
+- 在那个时候，新的props就可以被访问到了，而且reducer调用也不是在effect里。
+- 简单来说就是依赖了props 就方在组件内部使用，不依赖方外面；
+
+# React只会在浏览器绘制后运行effects。
+# 这使得你的应用更流畅因为大多数effects并不会阻塞屏幕的更新。
+# Effect的清除同样被延迟了。上一次的effect会在重新渲染后被清除
+# effect的清除并不会读取“最新”的props。它只能读取到定义它的那次渲染中的props值
+
+# 最佳实践
+1. 如果某些函数仅在effect中调用，你可以把它们的定义移到effect中
+2. 如果一个函数没有使用组件内的任何值，你应该把它提到组件外面去定义，然后就可以自由地在effects中使用。
+3. 或者使用useCallBack，注意依赖项；
+- tips: useEffect 中的回调函数不能使用async 异步函数，而 useCallBack 是可以使用的；
+```js
+function SearchResults() {
+  const [query, setQuery] = useState('react');
+  // ✅ Preserves identity when its own deps are the same
+  const getFetchUrl = useCallback((query) => {
+    return 'https://hn.algolia.com/api/v1/search?query=' + query;
+  }, [query]);  // ✅ Callback deps are OK
+  
+  useEffect(() => {
+    const url = getFetchUrl('react');
+    // ... Fetch data and do something ...
+  }, [getFetchUrl]); // ✅ Effect deps are OK
+
+  useEffect(() => {
+    const url = getFetchUrl('redux');
+    // ... Fetch data and do something ...
+  }, [getFetchUrl]); // ✅ Effect deps are OK
+}
+```
+4. 函数传递下去或者多处依赖，用useCallBack才是恰到好处；不要滥用 useCallBack；
+5. 多读文章：https://juejin.im/post/5e6ccbf86fb9a07cb52bddf1
 
