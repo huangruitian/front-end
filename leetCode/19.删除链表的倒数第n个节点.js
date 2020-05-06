@@ -25,22 +25,22 @@
  * @return {ListNode}
  */
 var removeNthFromEnd = function (head, n) {
-  let fast = head;
-  //快指针先走n
-  while (n > 0) {
+  // 1.先跑一遍得到长度，然后删除倒数第N个
+  // 2.快慢指针
+  let res = new ListNode(null)
+  res.next = head
+  let fast = res
+  let slow = res
+  while(n){
     fast = fast.next
     n--
   }
-  //如果n刚好是空，说明n等于链表长度
-  if (!fast) return head.next
-  let slow = head
-  //快慢指针一起走
-  while (fast.next) {
+  // [1] 1
+  while(fast && fast.next){
     fast = fast.next
     slow = slow.next
   }
-  //删除
   slow.next = slow.next.next
-  return head
+  return res.next
 };
 // @lc code=end

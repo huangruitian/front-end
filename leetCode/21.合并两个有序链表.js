@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Autor: hrt
  * @Date: 2019-11-22 17:31:46
  * @LastEditors: hrt
@@ -25,44 +25,45 @@
  * @return {ListNode}
  */
 var mergeTwoLists = function (l1, l2) {
-  // let res = new ListNode(null);
-  // let ret = res
-  // let temp = 0; 
-  // while(l1 && l2){
-  //   if(l2.val > l1.val){
-  //     temp = l1.val
-  //     l1 = l1.next
-  //   }else{
-  //     temp = l2.val
-  //     l2 = l2.next
-  //   }
-  //   res.next = new ListNode(temp)
-  //   res = res.next
-  // }
-  // while(l1){
-  //   res.next = new ListNode(l1.val)
-  //   res = res.next
-  //   l1 = l1.next
-  // }
-  // while(l2){
-  //   res.next = new ListNode(l2.val)
-  //   l2 = l2.next
-  //   res = res.next
-  // } 
-  // // console.log(ret)
-  // return ret.next
-
   // 递归写法
-  if (l1 == null) {
-    return l2;
-  } else if (l2 == null) {
-    return l1;
-  } else if (l1.val < l2.val) {
-    l1.next = mergeTwoLists(l1.next, l2);
-    return l1;
-  } else {
-    l2.next = mergeTwoLists(l1, l2.next);
-    return l2;
+  // if(!l1){
+  //   return l2
+  // }else if(!l2){
+  //   return l1
+  // }else if(l2.val > l1.val){
+  //   // process 进入下一层 level
+  //   l1.next = mergeTwoLists(l1.next, l2)
+  //   return l1
+  // }else{
+  //   l2.next = mergeTwoLists(l1, l2.next)
+  //   return l2
+  // }
+
+  // 枚举写法
+  let res = new ListNode(null);
+  let ret = res //指针会移动。。。
+  while (l1 && l2) {
+    if (l1.val > l2.val) {
+      res.next = new ListNode(l2.val);
+      l2 = l2.next;
+    } else {
+      res.next = new ListNode(l1.val);
+      l1 = l1.next;
+    }
+    res = res.next;
   }
+  
+  while (l1) {
+    res.next = new ListNode(l1.val);
+    l1 = l1.next;
+    res = res.next;
+  }
+
+  while (l2) {
+    res.next = new ListNode(l2.val);
+    l2 = l2.next;
+    res = res.next;
+  }
+  return ret.next;
 };
 // @lc code=end

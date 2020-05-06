@@ -17,24 +17,29 @@
  * @return {ListNode}
  */
 var reverseList = function(head) {
-    // let cur = head
-    // let pre = null
-    // let nex = null
-    // while(cur){
-    //   nex = cur.next
-    //   cur.next = pre
-    //   //下一个
-    //   pre = cur
-    //   cur = nex
-    // }
-    // return pre
-    //递归写法比较简单
-    if(!head || !head.next) return head
-    let newHead = reverseList(head.next)
-    let nex = head.next
-    nex.next = head
-    head.next = null
-    return newHead
+//    if(!head || !head.next){
+//        return head
+//    }
+//    // process
+//    // 下一个同样是这样处理    
+//    let newHead = reverseList(head.next)
+//    let nextNode = head.next
+//    nextNode.next = head
+//    head.next = null
+//    return newHead
+
+    let pre = null, cur = head, nxt = head;
+    while(cur != null){
+    // 先保留 nextNode    
+    nxt = cur.nxt
+    // 直接反转
+    cur.next = pre
+    // 当前的变成前一个 
+    pre = cur
+    // 下一个变成当前的  
+    cur = nxt
+    }
+    return pre
 };
 // @lc code=end
 

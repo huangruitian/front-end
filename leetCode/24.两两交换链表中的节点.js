@@ -25,11 +25,11 @@
  */
 var swapPairs = function (head) {
   //递归版本
-  // if(!head || !head.next) return head;
-  // let three = swapPairs(head.next.next)
-  // let second = head.next
-  // second.next = head
-  // head.next = three
-  // return second
+  if(!head || !head.next) return head;
+  let three = swapPairs(head.next.next)
+  let second = head.next
+  second.next = head
+  head.next = three
+  return second
 };
 // @lc code=end
