@@ -17,11 +17,14 @@
  * @param {number} sum
  * @return {boolean}
  */
-var hasPathSum = function(root, sum) {
-    if(!root) return false;
-    sum = sum - root.val
-    if(!root.left && !root.right && !sum) return true;
+var hasPathSum = function (root, sum) {
+    // 递归出口
+    if (!root) return false;
+    // process
+    sum -= root.val;
+    if (!root.left && !root.right && !sum) return true;
+    // call self
     return hasPathSum(root.left, sum) || hasPathSum(root.right, sum)
+    // rest state
 };
 // @lc code=end
-

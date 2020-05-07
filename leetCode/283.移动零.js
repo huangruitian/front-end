@@ -29,11 +29,24 @@ var moveZeroes = function (nums) {
   //   nums[i] = temp[i]
   // }
 
-  //更简洁的双指针
+  //更简洁的双指针，记录非0的位置
   let left = 0
+  let temp = 0
   for (let i = 0, len = nums.length; i < len; i++) {
     if (nums[i] !== 0) {
-      [nums[left], nums[i]] = [nums[i], nums[left]]
+    //   [nums[left], nums[i]] = [nums[i], nums[left]]
+    //   left++
+
+      // temp = nums[left]
+      // nums[left] = nums[i]
+      // nums[i] = temp
+      // left++
+      
+      // 第三种
+      nums[left] = nums[i]
+      if(i !== left){
+        nums[i] = 0
+      }
       left++
     }
   }

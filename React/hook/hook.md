@@ -428,7 +428,7 @@ ReactDOM.render(<Counter />, rootElement);
 - 在那个时候，新的props就可以被访问到了，而且reducer调用也不是在effect里。
 - 简单来说就是依赖了props 就方在组件内部使用，不依赖方外面；
 
-# React只会在浏览器绘制后运行effects。
+# React只会在浏览器绘制后运行 effects。
 # 这使得你的应用更流畅因为大多数effects并不会阻塞屏幕的更新。
 # Effect的清除同样被延迟了。上一次的effect会在重新渲染后被清除
 # effect的清除并不会读取“最新”的props。它只能读取到定义它的那次渲染中的props值
@@ -459,4 +459,3 @@ function SearchResults() {
 ```
 4. 函数传递下去或者多处依赖，用useCallBack才是恰到好处；不要滥用 useCallBack；
 5. 多读文章：https://juejin.im/post/5e6ccbf86fb9a07cb52bddf1
-
