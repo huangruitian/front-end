@@ -37,7 +37,7 @@ var buildTree = function (preorder, inorder) {
         let right_pre = preorder
 
         root.left = buildTree(left_pre, left_inorder)
-        root.right = buildTree(right_pre, right_inorder) //这有问题
+        root.right = buildTree(right_pre, right_inorder)
         return root
     }
 };

@@ -24,9 +24,14 @@
  * @return {number}
  */
 var maxDepth = function(root) {
-  //这种题递归很好做，小的深度0会先入栈出栈，大的深度会后出
-  if(!root) return 0;
-  return Math.max(maxDepth(root.left) + 1, maxDepth(root.right) + 1)
+  //这种题递归很好做
+  // if(!root) return 0;
+  // return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1
+  // 空间 O（2^h） 
+
+  // 非递归写法
+  // 1.BFS 咯
+  // 时间复杂度O（n）, 空间 O（n）
 };
 // @lc code=end
 
