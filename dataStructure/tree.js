@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Autor: hrt
  * @Date: 2019-08-22 15:37:56
  * @LastEditors: hrt
@@ -314,7 +314,7 @@
 //       =========================================================
 //                 1                        6
 //       =========================================================
-//            -1       4                n       7      
+//            -1       4                n       7
 //       =========================================================
 //           n   n   2   n                   n      8
 //       =========================================================
@@ -344,7 +344,7 @@
 // // 递归重建二叉树
 
 // function reConstructBinaryTree(pre, vin) {
-//   //pre, 根左右 
+//   //pre, 根左右
 //   //vin  左右根
 //   let root = pre[0];
 //   let index = vin.indexOf(root)
@@ -396,7 +396,7 @@
 //   }
 // }
 
-// // 给定一棵二叉搜索树，请找出其中的第k小的结点。 
+// // 给定一棵二叉搜索树，请找出其中的第k小的结点。
 // // 例如， （5，3，7，2，4，6，8） 中，按结点数值大小顺序第三小结点的值为4。
 // // 思路：二叉搜索树的中序遍历即排序后的节点，本题实际考察二叉树的遍历。
 
@@ -493,7 +493,6 @@
 //   }
 //   return 1 + countNodes(root.left) + countNodes(root.right)
 // };
-
 
 // // 二叉树的
 // var t = new Tree();
@@ -662,7 +661,7 @@
 //   let rootIdxInOrder = inOrder.indexOf(root.val);
 //   //左子树的中序遍历
 //   let leftTreeInOrder = inOrder.slice(0, rootIdxInOrder);
-//   //左子树的先序遍历 
+//   //左子树的先序遍历
 //   let leftTreePreOrder = preOrder.slice(1, leftTreeInOrder.length + 1);
 //   //递归的寻找赋值
 //   root.left = buildTree(leftTreePreOrder, leftTreeInOrder);
@@ -699,7 +698,7 @@
 
 //   //左子树的中序遍历
 //   let leftTreeInOrder = inorder.slice(0, rootIdxInOrder);
-//   //左子树的后序遍历 
+//   //左子树的后序遍历
 //   let leftTreePreOrder = postorder.slice(0, rootIdxInOrder);
 //   //递归的寻找赋值
 //   root.left = buildTree(leftTreePreOrder, leftTreeInOrder);
@@ -810,15 +809,15 @@
 // 复习
 //节点
 function Node(val, left, right) {
-  this.val = val
-  this.left = left
-  this.right = right
+  this.val = val;
+  this.left = left;
+  this.right = right;
 }
 
 //打印节点
 Node.prototype.show = function () {
   console.log(this.val);
-}
+};
 
 //二叉树
 function Tree() {
@@ -828,121 +827,125 @@ function Tree() {
 // 以二叉搜索树为例子
 // 二叉搜索树，满足大的放右边，小的放左边（找到空为止）
 Tree.prototype.insert = function (data) {
-  let node = new Node(data)
+  let node = new Node(data);
   if (!this.root) {
-    this.root = node
-    return node //不return就会死循环
+    this.root = node;
+    return node; //不return就会死循环
   }
-  let cur = this.root
-  let parent = null
+  let cur = this.root;
+  let parent = null;
   while (cur) {
-    parent = cur
+    parent = cur;
     if (cur.val < data) {
-      cur = cur.right
+      cur = cur.right;
       if (!cur) {
-        parent.right = node
+        parent.right = node;
       }
     } else {
-      cur = cur.left
+      cur = cur.left;
       if (!cur) {
-        parent.left = node
+        parent.left = node;
       }
     }
   }
-  return node
-}
+  return node;
+};
 
 //获取最小值
 Tree.prototype.getMin = function () {
-  let cur = this.root
-  let pre = null
+  let cur = this.root;
+  let pre = null;
   if (!cur) {
-    return pre
+    return pre;
   }
   while (cur) {
-    pre = cur
-    cur = cur.left
+    pre = cur;
+    cur = cur.left;
   }
-  return pre
-}
+  return pre;
+};
 
 //获取最大值
 Tree.prototype.getMax = function () {
-  let cur = this.root
-  let pre = null
+  let cur = this.root;
+  let pre = null;
   if (!cur) {
-    return pre
+    return pre;
   }
   while (cur) {
-    pre = cur
-    cur = cur.right
+    pre = cur;
+    cur = cur.right;
   }
-  return pre
-}
+  return pre;
+};
 
 //获取一个节点
 Tree.prototype.getNode = function (data) {
-  let cur = this.root
+  let cur = this.root;
   if (!cur || !data) {
-    return null
+    return null;
   }
   while (cur) {
     if (cur.val === data) {
-      return cur
+      return cur;
     } else if (data > cur.val) {
-      cur = cur.right
+      cur = cur.right;
     } else {
-      cur = cur.left
+      cur = cur.left;
     }
   }
-  return null
-}
+  return null;
+};
 
 //获取树深度
 Tree.prototype.getDeep = function (root) {
   let bfs = (root, deep) => {
     if (!root) {
-      return deep
+      return deep;
     }
-    let lDeep = deep
-    let rDeep = deep
-    return Math.max(bfs(root.left, ++lDeep), bfs(root.right, ++rDeep))
-  }
-  return bfs(root, 0)
-}
+    let lDeep = deep;
+    let rDeep = deep;
+    return Math.max(bfs(root.left, ++lDeep), bfs(root.right, ++rDeep));
+  };
+  return bfs(root, 0);
+};
 
 //获取树深度 DFS, 如果是用队列就是BFS; 如果是图要借助hash遍历
 Tree.prototype.getDeep1 = function (root) {
   if (!root) {
-    return 0
+    return 0;
   }
-  let stack = [{
-    key: root,
-    val: 1
-  }]
-  let deep = 0
-  let cur
-  let curNode
-  let node_Deep
-  let res = []
+  let stack = [
+    {
+      key: root,
+      val: 1,
+    },
+  ];
+  let deep = 0;
+  let cur;
+  let curNode;
+  let node_Deep;
+  let res = [];
   while (stack.length) {
-    cur = stack.pop()
-    curNode = cur.key
-    res.push(curNode.val)
-    node_Deep = cur.val
-    deep = Math.max(deep, node_Deep)
-    if (curNode.left) stack.push({
-      key: curNode.left,
-      val: node_Deep + 1
-    });
-    if (curNode.right) stack.push({
-      key: curNode.right,
-      val: node_Deep + 1
-    });
+    cur = stack.pop();
+    curNode = cur.key;
+    res.push(curNode.val);
+    node_Deep = cur.val;
+    deep = Math.max(deep, node_Deep);
+    if (curNode.left)
+      stack.push({
+        key: curNode.left,
+        val: node_Deep + 1,
+      });
+    if (curNode.right)
+      stack.push({
+        key: curNode.right,
+        val: node_Deep + 1,
+      });
   }
   // console.log(res)
-  return deep
-}
+  return deep;
+};
 
 //前序遍历
 // 取跟节点为目标节点，开始遍历
@@ -951,22 +954,22 @@ Tree.prototype.getDeep1 = function (root) {
 // 3.节点出栈，以右孩子为目标节点，再依次执行1、2、3
 Tree.prototype.preOrder = function (root) {
   if (!root) {
-    return null
+    return null;
   }
-  let cur = root
-  let stack = []
-  let res = []
+  let cur = root;
+  let stack = [];
+  let res = [];
   while (cur || stack.length) {
     while (cur) {
-      res.push(cur.val)
-      stack.push(cur)
-      cur = cur.left
+      res.push(cur.val);
+      stack.push(cur);
+      cur = cur.left;
     }
-    cur = stack.pop()
-    cur = cur.right
+    cur = stack.pop();
+    cur = cur.right;
   }
-  return res
-}
+  return res;
+};
 
 //中序遍历，
 // 取跟节点为目标节点，开始遍历
@@ -975,22 +978,22 @@ Tree.prototype.preOrder = function (root) {
 // 3.以右孩子为目标节点，再依次执行1、2、3
 Tree.prototype.middleOrder = function (root) {
   if (!root) {
-    return null
+    return null;
   }
-  let cur = root
-  let stack = []
-  let res = []
+  let cur = root;
+  let stack = [];
+  let res = [];
   while (cur || stack.length) {
     while (cur) {
-      stack.push(cur)
-      cur = cur.left
+      stack.push(cur);
+      cur = cur.left;
     }
-    cur = stack.pop()
-    res.push(cur.val)
-    cur = cur.right
+    cur = stack.pop();
+    res.push(cur.val);
+    cur = cur.right;
   }
-  return res
-}
+  return res;
+};
 
 //后序遍历
 // 取跟节点为目标节点，开始遍历
@@ -999,31 +1002,31 @@ Tree.prototype.middleOrder = function (root) {
 // 3.栈顶节点的右节点不为空且未被访问，以右孩子为目标节点，再依次执行1、2、3
 Tree.prototype.laterOrder = function (root) {
   if (!root) {
-    return null
+    return null;
   }
-  let cur = root
-  let stack = []
-  let res = []
-  let last = null
+  let cur = root;
+  let stack = [];
+  let res = [];
+  let last = null;
   while (cur || stack.length) {
     while (cur) {
-      stack.push(cur)
-      cur = cur.left
+      stack.push(cur);
+      cur = cur.left;
     }
-    cur = stack[stack.length - 1]
+    cur = stack[stack.length - 1];
     // 2.栈顶节点的右节点为空或右节点被访问过 -> 节点出栈并访问他，将节点标记为已访问
     if (!cur.right || last == cur.right) {
-      cur = stack.pop()
-      res.push(cur.val)
-      last = cur
-      cur = null //避免迭代的时候出现不为空。死循环
+      cur = stack.pop();
+      res.push(cur.val);
+      last = cur;
+      cur = null; //避免迭代的时候出现不为空。死循环
     } else {
       // 3.栈顶节点的右节点不为空且未被访问，以右孩子为目标节点，再依次执行1、2、3
-      cur = cur.right
+      cur = cur.right;
     }
   }
-  return res
-}
+  return res;
+};
 
 var t = new Tree();
 t.insert(5);
@@ -1037,16 +1040,16 @@ t.insert(8);
 t.insert(-1);
 
 console.log(t);
-console.log(t.getMin(), t.getMax())
+console.log(t.getMin(), t.getMax());
 console.log(t.getNode(2));
 console.log(t.getDeep(t.root));
 console.log(t.getDeep1(t.root));
 
-console.log('========================');
-console.log(t.preOrder(t.root)) //5,1,-1,4,2,3,6,7,8
-console.log('========================');
-console.log(t.middleOrder(t.root)) //-1,1,2,3,4,5,6,7,8
-console.log('========================');
+console.log("========================");
+console.log(t.preOrder(t.root)); //5,1,-1,4,2,3,6,7,8
+console.log("========================");
+console.log(t.middleOrder(t.root)); //-1,1,2,3,4,5,6,7,8
+console.log("========================");
 console.log(t.laterOrder(t.root)); //-1,3,2,4,1,8,7,6,5
 
 /**101
@@ -1065,20 +1068,20 @@ var isSymmetric = function (root) {
   //给树照个镜子
   let check = (node, node2) => {
     if (!node && !node2) {
-      return true
+      return true;
     }
     if (!node || !node2) {
-      return false
+      return false;
     }
     if (node.val != node2.val) {
-      return false
+      return false;
     }
-    return check(node.left, node2.right) && check(node.right, node2.left)
-  }
-  return check(root, root)
+    return check(node.left, node2.right) && check(node.right, node2.left);
+  };
+  return check(root, root);
 };
 
-/** 114 
+/** 114
  * Definition for a binary tree node.
  * function TreeNode(val) {
  *     this.val = val;
@@ -1090,27 +1093,27 @@ var isSymmetric = function (root) {
  * @return {void} Do not return anything, modify root in-place instead.
  */
 var flatten = function (root) {
-  if (!root) return
+  if (!root) return;
   //先序遍历
-  let stack = []
-  let cur = root
-  let res = []
+  let stack = [];
+  let cur = root;
+  let res = [];
   while (cur || stack.length) {
     while (cur) {
-      res.push(cur.val)
-      stack.push(cur)
-      cur = cur.left
+      res.push(cur.val);
+      stack.push(cur);
+      cur = cur.left;
     }
-    cur = stack.pop()
-    cur = cur.right
+    cur = stack.pop();
+    cur = cur.right;
   }
-  res.shift()
-  let p = root
-  root.left = null
-  root.right = null
+  res.shift();
+  let p = root;
+  root.left = null;
+  root.right = null;
   while (res.length) {
-    p.right = new TreeNode(res.shift())
-    p = p.right
+    p.right = new TreeNode(res.shift());
+    p = p.right;
   }
 };
 
@@ -1135,8 +1138,6 @@ function balanced(node) {
   return Math.max(left, right) + 1;
 }
 
-
-
 /** 509
  * // Definition for a Node.
  * function Node(val,children) {
@@ -1149,18 +1150,18 @@ function balanced(node) {
  * @return {number[]}
  */
 var postorder = function (root) {
-  let res = []
+  let res = [];
   let pOrder = (root, res) => {
     if (!root) {
-      return
+      return;
     }
     for (var i = 0; i < root.children.length; i++) {
       pOrder(root.children[i], res);
     }
-    res.push(root.val)
-  }
-  pOrder(root, res)
-  return res
+    res.push(root.val);
+  };
+  pOrder(root, res);
+  return res;
 };
 
 // 前序（根左右）：
@@ -1178,7 +1179,6 @@ var postorder = function (root) {
 // 2.栈顶节点的右节点为空或右节点被访问过 -> 节点出栈并访问他，将节点标记为已访问
 // 3.栈顶节点的右节点不为空且未被访问，以右孩子为目标节点，再依次执行1、2、3
 
-
 /** 124
  * Definition for a binary tree node.
  * function TreeNode(val) {
@@ -1191,19 +1191,19 @@ var postorder = function (root) {
  * @return {number}
  */
 var maxPathSum = function (root) {
-  let res = Number.MIN_VALUE
+  let res = Number.MIN_VALUE;
   let dfs = (root) => {
     if (!root) {
-      return 0
+      return 0;
     }
     let left = dfs(root.left);
     let right = dfs(root.right);
     //更新结果
-    res = Math.max(res, left + right + root.val)
+    res = Math.max(res, left + right + root.val);
     //走最大的
-    return Math.max(0, Math.max(left, right) + root.val)
-  }
-  dfs(root)
+    return Math.max(0, Math.max(left, right) + root.val);
+  };
+  dfs(root);
   return res;
 };
 
@@ -1219,19 +1219,19 @@ var maxPathSum = function (root) {
  * @return {number[]}
  */
 var rightSideView = function (root) {
-  const res = []
-  const queue = [root]
+  const res = [];
+  const queue = [root];
   while (queue.length) {
-    const len = queue.length
-    res.push(queue[0])
+    const len = queue.length;
+    res.push(queue[0]);
     while (len > 0) {
-      const node = queue.shift()
-      if (node.right) childs.push(node.right)
-      if (node.left) childs.push(node.left)
-      len--
+      const node = queue.shift();
+      if (node.right) childs.push(node.right);
+      if (node.left) childs.push(node.left);
+      len--;
     }
   }
-  return res
+  return res;
 };
 
 /** 226 翻转二叉树
@@ -1247,13 +1247,13 @@ var rightSideView = function (root) {
  */
 var invertTree = function (root) {
   if (!root) {
-    return root
+    return root;
   }
-  let temp = root.right
-  root.right = root.left
-  root.left = temp
-  invertTree(root.left)
-  invertTree(root.right)
+  let temp = root.right;
+  root.right = root.left;
+  root.left = temp;
+  invertTree(root.left);
+  invertTree(root.right);
 };
 
 /** 230 中序遍历
@@ -1270,22 +1270,22 @@ var invertTree = function (root) {
  */
 var kthSmallest = function (root, k) {
   if (!root || k < 1) {
-    return
+    return;
   }
-  const stack = []
-  const cur = root
-  const res = []
+  const stack = [];
+  const cur = root;
+  const res = [];
   while (cur || stack.length) {
     while (cur) {
-      stack.push(cur)
-      cur = cur.left
+      stack.push(cur);
+      cur = cur.left;
     }
-    cur = stack.pop()
-    res.push(cur.val)
-    cur = cur.right
+    cur = stack.pop();
+    res.push(cur.val);
+    cur = cur.right;
   }
   // console.log(res)
-  return res[k - 1]
+  return res[k - 1];
 };
 
 /** 257二叉树的所有路径
@@ -1300,17 +1300,17 @@ var kthSmallest = function (root, k) {
  * @return {string[]}
  */
 var binaryTreePaths = function (root) {
-  const res = []
+  const res = [];
   const bfs = (root, str) => {
     if (!root) {
-      return
+      return;
     }
-    if (!root.left && !root.right) res.push(str + '->' + root.val);
-    if (root.left) bfs(root.left, str + root.val + '->');
-    if (root.right) bfs(root.right, str + root.val + '->');
-  }
-  bfs(root, '')
-  return res
+    if (!root.left && !root.right) res.push(str + "->" + root.val);
+    if (root.left) bfs(root.left, str + root.val + "->");
+    if (root.right) bfs(root.right, str + root.val + "->");
+  };
+  bfs(root, "");
+  return res;
 };
 
 /** 337
@@ -1404,6 +1404,7 @@ var maxSlidingWindow = function (nums, k) {
  *     this.next = null;
  * }
  */
+
 /**
  * Definition for a binary tree node.
  * function TreeNode(val) {
@@ -1412,9 +1413,27 @@ var maxSlidingWindow = function (nums, k) {
  * }
  */
 /**
- * @param {ListNode} head
+ * @param {ListNode} root
  * @return {TreeNode}
  */
-var sortedListToBST = function(head) {
-    
+const treeOrder = function (root) {
+  //没有访问过，颜色标记为0
+  const stack = [[0, root]];
+  const result = []
+  while(stack.length){
+    let [color, node] = stack.pop()
+    // 节点不存在
+    if(!node) continue;
+    // 没有访问过，颜色为0
+    if(!color){
+      // 因为是模拟栈，栈是先进后出的; 那我们倒着写就行了
+      // 根节点的位置就决定了三种遍历方式，还记得嘛？
+      stack.push([0, root.right])
+      stack.push([0, root.left])
+      stack.push([1, root])   
+    }else{
+      result.push(node.val)
+    }
+  }
+  return result
 };
