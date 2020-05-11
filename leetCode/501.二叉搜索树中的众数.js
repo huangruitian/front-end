@@ -28,6 +28,7 @@ var findMode = function(root) {
   }
   DFS(root, map)
   let temp = [...map]
+  // 秒用排序
   temp.sort((a, b) => b[1] - a[1])
   
   for (let i = 0; i < temp.length; i++) {
