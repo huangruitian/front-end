@@ -1,12 +1,12 @@
 /*
- * @Description: 
+ * @Description:
  * @Autor: hrt
  * @Date: 2019-09-05 09:01:06
  * @LastEditors: hrt
  * @LastEditTime: 2019-11-04 09:34:19
  */
 // /*
-//  * @Description: 
+//  * @Description:
 //  * @Autor: hrt
 //  * @Date: 2019-09-05 09:01:06
 //  * @LastEditors: hrt
@@ -244,7 +244,7 @@
 //     for (let i = idx; i <= right; i++) {
 //       if (arr[i] < flag) { //flag第一个，[3, 2, 1]
 //         [arr[i], arr[idx]] = [arr[idx], arr[i]]
-//         idx++ //交换了这个指针下移一位 
+//         idx++ //交换了这个指针下移一位
 //       }
 //     }
 //     //找到最后没有了，把标尺值和交换的指针idx交换，就形成了一边大一边小
@@ -458,7 +458,6 @@
 //   return longestCnt
 // };
 
-
 // // 分治法，归并排序，先分割，再二路归并
 // function mergeSort(array) {
 //   let len = array.length
@@ -546,22 +545,22 @@ let bubbleSort = (arr) => {
   //走的趟数
   for (let i = 0, len = arr.length; i < len; i++) {
     //一开始默认已经排好序
-    let complete = true
-    //如果走完一趟之后，最大一个数肯定在最后，就不需要比较了                         
+    let complete = true;
+    //如果走完一趟之后，最大一个数肯定在最后，就不需要比较了
     for (let j = 0; j < len - i - 1; j++) {
       if (arr[j] > arr[j + 1]) {
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
-        complete = false
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        complete = false;
       }
     }
-    console.log(`第${i + 1}趟数组：`, arr)
+    console.log(`第${i + 1}趟数组：`, arr);
     //没有进入内层循环说明已经是有序数组，直接break
     if (complete) {
       break;
     }
   }
-  return arr
-}
+  return arr;
+};
 // 时间复杂度：O(n^2)
 // 空间复杂度：O(1)
 // 稳定性：稳定
@@ -574,25 +573,25 @@ let bubbleSort = (arr) => {
 
 let insertSort = (arr) => {
   //拿出目标值，待插入元素（动图的红色方块）
-  let target = 0
+  let target = 0;
   //从右边第二个开始比较
   for (let i = 1, len = arr.length; i < len; i++) {
-    target = i
+    target = i;
     //内层循环，控制左边的有序数组
     for (let j = i - 1; j >= 0; j--) {
       //插到有序序列比j小的前面
       if (arr[target] < arr[j]) {
         //es6 交换两个数
-        [arr[j], arr[target]] = [arr[target], arr[j]]
-        target = j
+        [arr[j], arr[target]] = [arr[target], arr[j]];
+        target = j;
       } else {
         //如果一趟下来没有进行插入操作，说明是有序了
         break;
       }
     }
   }
-  return arr
-}
+  return arr;
+};
 // 时间复杂度：O(n^2)
 // 空间复杂度：O(1)
 // 稳定性：稳定
@@ -604,28 +603,27 @@ let insertSort = (arr) => {
 
 let selectSort = (arr) => {
   //动图红色方块，被选择的数
-  let min = 0
+  let min = 0;
   // -1是因为最后一个肯定是最大或者最小的了
   for (let i = 0, len = arr.length; i < len - 1; i++) {
-    min = i
+    min = i;
     //找一个最小的和i交换，从i + 1 开始
     for (let j = i + 1; j < len; j++) {
       if (arr[min] > arr[j]) {
         //遍历更新最小数的索引
-        min = j
+        min = j;
       }
     }
     //一趟之后肯定找到最小的，交换
-    [arr[i], arr[min]] = [arr[min], arr[i]]
+    [arr[i], arr[min]] = [arr[min], arr[i]];
   }
-  return arr
-}
+  return arr;
+};
 // 时间复杂度：O(n^2)
 // 空间复杂度：O(1)
 // 稳定性：稳定
 
 // console.log(selectSort([7, 5, 3, 1, 9, 4, 6, 8, 2]))
-
 
 // 快速排序，利用了分治的思想（将问题分解成一些小问题递归求解）
 // 通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据比另一部分的所有数据要小，
@@ -662,36 +660,35 @@ let selectSort = (arr) => {
 // 要把 t 和 idx - 1 互换，变成 [小于t, t] [大于t], 并且返回 t 的索引进行下一轮递归
 function quickSort(array) {
   let findCenter = (l, r, arr) => {
-    let t = arr[l] //比较的目标值
-    let idx = l + 1
+    let t = arr[l]; //比较的目标值
+    let idx = l + 1;
     for (let i = idx; i <= r; i++) {
       if (arr[i] < t) {
-        [arr[i], arr[idx]] = [arr[idx], arr[i]]
-        idx++
+        [arr[i], arr[idx]] = [arr[idx], arr[i]];
+        idx++;
       }
     }
-    [arr[l], arr[idx - 1]] = [arr[idx - 1], arr[l]]
-    return idx - 1 //最后的索引
-  }
+    [arr[l], arr[idx - 1]] = [arr[idx - 1], arr[l]];
+    return idx - 1; //最后的索引
+  };
   let sort = (l, r, arr) => {
     // 递归出口
     if (l < r) {
       //每次拿到一个中间值
-      let mid = findCenter(l, r, arr)
+      let mid = findCenter(l, r, arr);
       // 递归左边
-      sort(l, mid, arr)
+      sort(l, mid, arr);
       // 递归右边，和解法一是一样的思路
-      sort(mid + 1, r, arr)
+      sort(mid + 1, r, arr);
     }
-  }
-  sort(0, array.length - 1, array)
-  return array
+  };
+  sort(0, array.length - 1, array);
+  return array;
 }
 // 时间复杂度：平均O(NlogN)，最坏O(n^2)，实际上大多数情况下小于O(NlogN)
 // 空间复杂度: O(logN)（递归调用消耗）
 // 稳定性：不稳定
 // console.log(quickSort([7, 5, 3, 1, 9, 4, 6, 8, 2]))
-
 
 // 归并排序，利用分治的思想实现的排序方法。
 // 一直往下分，分到小于2，就反过来合
@@ -709,32 +706,31 @@ let mergeSort = (array) => {
   const end = array.slice(mid);
   //这步是关键，每次调用mergeSort分解函数，就会同时调用merge合并函数就形成了上图的效果
   return merge(mergeSort(front), mergeSort(end));
-}
+};
 
 function merge(left, right) {
-  let temp = []
+  let temp = [];
   //想想合并的过程
   while (left.length && right.length) {
     if (left[0] < right[0]) {
-      temp.push(left.shift())
+      temp.push(left.shift());
     } else {
-      temp.push(right.shift())
+      temp.push(right.shift());
     }
   }
   // 防止合完了左边还有数
   while (left.length) {
-    temp.push(left.shift())
+    temp.push(left.shift());
   }
   // 防止合完了右边还有数
   while (right.length) {
-    temp.push(right.shift())
+    temp.push(right.shift());
   }
-  return temp
+  return temp;
 }
 // 时间复杂度：O(NlogN)
 // 空间复杂度: O(n)（递归调用消耗）
 // 稳定性：不稳定
-
 
 // 堆排序
 // 1.创建一个大顶堆，大顶堆的堆顶一定是最大的元素。
@@ -763,7 +759,7 @@ function merge(left, right) {
 //   return arr
 // }
 
-// // heapify  
+// // heapify
 // // 首先要要明确堆可以用数组下标表述，因为堆是一个完全二叉树
 // // 然后堆 的一些公式
 // // 已知节点i, 左子节点2*i+1，右2*i+2，父节点(i-1)/2, i 是索引
@@ -796,52 +792,52 @@ function merge(left, right) {
 // }
 
 const swap = (i, j, arr) => {
-  let temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
-}
+  let temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+};
 
 const heapify = (i, len, arr) => {
   if (i >= len) {
-    return
+    return;
   }
-  let max = i
-  let l = 2 * i + 1
-  let r = 2 * i + 2
+  let max = i;
+  let l = 2 * i + 1;
+  let r = 2 * i + 2;
   // len防止越界
   if (l < len && arr[l] > arr[max]) {
-    max = l
+    max = l;
   }
   if (r < len && arr[r] > arr[max]) {
-    max = r
+    max = r;
   }
   if (max != i) {
-    swap(max, i, arr)
-    heapify(max, len, arr)
+    swap(max, i, arr);
+    heapify(max, len, arr);
   }
-}
+};
 
 const createMaxHeap = (arr) => {
-  let len = arr.length
+  let len = arr.length;
   // heapify(0, len, arr) //不是乱序的数组可以这么来
-  let parent = (len / 2) >> 1
+  let parent = (len / 2) >> 1;
   // 如果数组乱序必须从最后一个父节点开始全部做heapify
   for (let i = parent; i >= 0; i--) {
-    heapify(i, len, arr)
+    heapify(i, len, arr);
   }
-  return arr
-}
+  return arr;
+};
 
 const heapSort = (arr) => {
-  createMaxHeap(arr)
+  createMaxHeap(arr);
   for (let i = arr.length - 1; i >= 0; i--) {
     //第一个和最后一个交换
-    swap(i, 0, arr)
+    swap(i, 0, arr);
     //剩下的再做次heapify构建成堆把最值弄到堆根
-    heapify(0, i, arr)
+    heapify(0, i, arr);
   }
-  return arr
-}
+  return arr;
+};
 
 // console.log('createMaxHeap', createMaxHeap([4, 10, 3, 5, 1, 2]))
 // console.log('heapSort', heapSort([4, 10, 3, 5, 1, 2]))
@@ -856,74 +852,134 @@ let midOrderSort = (arr) => {
   let buildTree = (arr) => {
     class Node {
       constructor(val) {
-        this.val = val
-        this.right = this.left = undefined
+        this.val = val;
+        this.right = this.left = undefined;
       }
     }
-    let root = new Node(arr.shift())
+    let root = new Node(arr.shift());
     let cur = root;
-    let parent = null
+    let parent = null;
     while (arr.length) {
-      let node = new Node(arr.shift())
-      cur = root
+      let node = new Node(arr.shift());
+      cur = root;
       while (cur) {
-        parent = cur
+        parent = cur;
         if (node.val >= cur.val) {
-          cur = cur.right
+          cur = cur.right;
           if (!cur) {
-            parent.right = node
+            parent.right = node;
           }
         } else {
-          cur = cur.left
+          cur = cur.left;
           if (!cur) {
-            parent.left = node
+            parent.left = node;
           }
         }
       }
     }
-    return root
-  }
+    return root;
+  };
   let midOrder = (root) => {
-    let stack = []
-    let cur = root
-    let res = []
+    let stack = [];
+    let cur = root;
+    let res = [];
     while (cur || stack.length) {
       while (cur) {
-        stack.push(cur)
-        cur = cur.left
+        stack.push(cur);
+        cur = cur.left;
       }
-      cur = stack.pop()
-      res.push(cur.val)
-      cur = cur.right
+      cur = stack.pop();
+      res.push(cur.val);
+      cur = cur.right;
     }
     return res;
-  }
-  return midOrder(buildTree(arr))
-}
+  };
+  return midOrder(buildTree(arr));
+};
 
-console.log('res', midOrderSort([4, 4, 10, 3, 5, 1, 2]))
+console.log("res", midOrderSort([4, 4, 10, 3, 5, 1, 2]));
 // 时间复杂度 O(n)
 // 空间复杂度 O(n)
 // 不稳定
 
 // 计数排序
 // 9，3，5，4，9，1，2，7，8，1，3，6，5，3，4，0，10，9 ，7，9
-let arr = [9, 3, 5, 4, 9, 1, 2, 7, 8, 1, 3, 6, 5, 3, 4, 0, 10, 9, 7, 9]
-let arr1 = [99, 100, 98, 97, 105]
+let arr = [9, 3, 5, 4, 9, 1, 2, 7, 8, 1, 3, 6, 5, 3, 4, 0, 10, 9, 7, 9];
+let arr1 = [99, 100, 98, 97, 105];
 let countSort = (arr) => {
   let max = Math.max(...arr);
   let min = Math.min(...arr);
-  let len = max - min + 1 //偏移量
+  let len = max - min + 1; //偏移量
   let countArr = Array(len).fill(0);
-  arr.forEach(d => countArr[d - min]++)
-  let idx = 0
+  arr.forEach((d) => countArr[d - min]++);
+  let idx = 0;
   countArr.forEach((d, i) => {
-      while(d > 0){
-        arr[idx++] = i + min
-        d--
-      }
-  })
+    while (d > 0) {
+      arr[idx++] = i + min;
+      d--;
+    }
+  });
   // console.log('countArr', countArr)
-  return arr
-}
-console.log(countSort(arr1))
+  return arr;
+};
+console.log(countSort(arr1));
+
+const sort = (array) => {
+  const findCenter = (L, R, A) => {
+    let flag = A[L];
+    let idx = L + 1;
+    for (let i = idx; i <= R; i++) {
+      // 保证所有的元素都比标尺元素小
+      if (A[i] < flag) {
+        [A[i], A[idx]] = [A[idx], A[i]];
+        idx++;
+      }
+    }
+    [A[L], A[idx - 1]] = [A[idx - 1], A[L]];
+    return idx - 1;
+  };
+  //1.选一个标尺元素，大的放一遍，小的放一边
+  const quickSort = (left, right, arr) => {
+    if (left < right) {
+      const mid = findCenter(left, right, arr);
+      quickSort(left, mid, arr);
+      quickSort(mid + 1, right, arr);
+    }
+  };
+  quickSort(0, array.length - 1, array);
+  return array;
+};
+
+// 归并排序 先分，再合
+const sort = (
+  arr = [9, 3, 5, 4, 9, 1, 2, 7, 8, 1, 3, 6, 5, 3, 4, 0, 10, 9, 7, 9]
+) => {
+  const mergeSort = (array) => {
+    let len = array.length;
+    if (len < 2) {
+      return array;
+    }
+    let mid = len >> 1;
+    let left = array.slice(0, mid);
+    let right = array.slice(mid);
+    return merge(mergeSort(left), mergeSort(right));
+  };
+  const merge = (left, right) => {
+    let temp = [];
+    while (left.length && right.length) {
+      if (left[0] > right[0]) {
+        temp.push(right.shift());
+      } else {
+        temp.push(left.shift());
+      }
+    }
+    while (left.length) {
+      temp.push(left.shift());
+    }
+    while (right.length) {
+      temp.push(right.shift());
+    }
+    return temp
+  };
+  return mergeSort(arr);
+};
