@@ -960,8 +960,10 @@ var coinChange = function (coins, amount) {
   let dp = Array(amount + 1).fill(Number.MAX_VALUE)
   dp[0] = 0
   for (let i = 0, n = coins.length; i < n; i++) {
-    for (let j = coins[i]; j <= amount; j++) { //j = coins[i], 要大于等于这个银币才能决定取不取
-      //关键点，dp[i - coins[j]] != Number.MAX_VALUE，取了这个银币之后还是正无穷，说明不可以取这个银币，不然不能组成找零钱
+    for (let j = coins[i]; j <= amount; j++) { 
+      // j = coins[i], 要大于等于这个银币才能决定取不取
+      // 关键点，dp[i - coins[j]] != Number.MAX_VALUE，取了这个银币之后还是正无穷，
+      // 说明不可以取这个银币，不然不能组成找零钱
       if (dp[j - coins[i]] != Number.MAX_VALUE) {
         dp[j] = Math.min(dp[j], dp[j - coins[i]] + 1)
       }
