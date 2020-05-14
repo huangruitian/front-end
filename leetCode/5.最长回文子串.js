@@ -28,7 +28,8 @@ var longestPalindrome = function (s) {
   let len = s.length
   if (len < 2) return s;
   let res = ''
-  let dp = Array(len).fill(0).map(d => d = Array(len).fill(false))
+  // let dp = Array(len).fill(0).map(d => d = Array(len).fill(false))
+  let dp = Array.from(new Array(len), () => new Array(len).fill(false))
   for (let r = 0; r < len; r++) {
     for (let l = 0; l <= r; l++) {
        //这里非常要注意是下三角形的状态 dp[l + 1][r - 1]
@@ -36,12 +37,13 @@ var longestPalindrome = function (s) {
          //下三角
          dp[l][r] = true
        }
+       //  
        if(dp[l][r] && r - l + 1 > res.length){
          res = s.substring(l, r + 1)
        }
     }
   }
-  console.log(dp)
+  // console.log(dp)
   return res;
 };
 // @lc code=end

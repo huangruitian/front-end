@@ -30,6 +30,7 @@ var maxProfit = function (prices) {
   }
   for (let i = 0; i < n; i++) {
     // 注意，这里正着来反着来都能得到结果，想下为什么？
+    // dp table 结果是一样的
     // for (let k = 1; k <= maxTime; k++) {
     for (let k = maxTime; k >= 1; k--) {
       if (i == 0) {
