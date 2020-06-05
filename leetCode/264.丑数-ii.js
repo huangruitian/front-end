@@ -9,13 +9,6 @@
  * @param {number} n
  * @return {number}
  */
-<<<<<<< HEAD
-var nthUglyNumber = function(n) {
-
-};
-// @lc code=end
-
-=======
 var nthUglyNumber = function (n) {
     //1-n
     //1是第一个丑数，然后网上推。就是初始值
@@ -41,4 +34,3 @@ var nthUglyNumber = function (n) {
     return dp[n - 1]
 };
 // @lc code=end
->>>>>>> 5f731c6386600c7eb9ef1b28ba96fcc526cc5192
