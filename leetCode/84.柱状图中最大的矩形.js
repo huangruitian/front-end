@@ -26,48 +26,29 @@ var largestRectangleArea = function (heights) {
     //     }
     //     max = Math.max(h * (right - left - 1), max)
     // }
+    // O(n^2) 复杂度过高
 
-    //2. 重复找了，记忆化搜索DP
-    //2.1 开辟 h[i][0] = left, h[i][1] = right
-    // let len = heights.length
-    // let left_i = Array(len)
-    // let right_i = Array(len)
-    // let max = 0
-    // left_i[0] = -1
-    // right_i[len - 1] = len
-    // for (let i = 1; i < len; i++) {
-    //     let tmp = i - 1;
-    //     // 大了一直往前找，找边界
-    //     while (tmp >= 0 && heights[tmp] >= heights[i]) tmp = left_i[tmp];
-    //     left_i[i] = tmp;
-    // }
-    // for (let i = len - 2; i >= 0; i--) {
-    //     let tmp = i + 1;
-    //     // 大了一直往前找，找边界
-    //     while (tmp < len && heights[tmp] >= heights[i]) tmp = right_i[tmp];
-    //     right_i[i] = tmp;
-    // }
-    // for (let i = 0; i < len; i++) {
-    //     max = Math.max(max, (right_i[i] - left_i[i] - 1) * heights[i]);
-    // }
-    // return max
-
-    // 3.单调栈，利用单调栈快速得到左右边界
-    let stack = [];
-    stack.push(-1);
-    let maxArea = 0;
-    for (let i = 0; i < heights.length; i++) {
-        // 栈顶元素不是第一个元素 -1 且数组呈下降关系时，什么时候结束呢？
-        // 显然是当栈顶元素为 -1 或者 heights[i] ≥ heights[stack.peek()] 跳出循环直接压栈
-        while (stack[stack.length - 1] != -1 && heights[i] < heights[stack[stack.length - 1]]) {
-            // 将栈中的序号弹出，计算最大面积
-            maxArea = Math.max(heights[stack.pop()] * (i - stack[stack.length - 1] - 1), maxArea);
-        }
-        stack.push(i);
+    // 单调栈，非常适合处理中间高两边低的情况；
+    // 用一个单调递增的栈，因为是单调递增，所以对于每个 heights[i]，左边界就是自己
+    // 当遇到一个大于等于栈顶元素的时候，说明还可以继续扩张面积；
+    // 当遇到比栈顶元素小的，说明不能继续扩张了；把栈顶元素弹出继续保持单调递增；
+    // 最后如果栈内还有元素，陆续弹出计算最大面积；
+    // 因为每个元素只有一次入栈出栈的机会，所以时间空间复杂度都是O（n）
+    
+    let n = heights.length
+    let stack = []
+    let res = 0
+    for(let i = 0; i < n; i++){
+      while(stack.length && stack[stack.length - 1] < heights[i]){
+        let current = stack.pop()
+        res = Math.max(res, heights[current] * (i - current + 1))
+      }  
+      stack.push(i)
     }
-    while (stack[stack.length - 1] != -1) {
-        maxArea = Math.max(heights[stack.pop()] * (heights.length - stack[stack.length - 1] - 1), maxArea);
+    while(stack.length){
+        let current = stack.pop()
+        res = Math.max(res, heights[current] * (n - current + 1))
     }
-    return maxArea;
+    return res;
 };
 // @lc code=end
