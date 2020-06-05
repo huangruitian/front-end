@@ -11,6 +11,16 @@
  * @return {number}
  */
 var maxProfit = function (k, prices) {
+  // dp[i][k][0]，前i天的股票价格，至今交易了k次，手上未持有股票
+  // dp[i][k][1]，前i天的股票价格，至今交易了k次，手上持有股票
+  // dp[i][k][0] = max(本来就没有股票，有股票，卖了)
+  // dp[i][k][1] = max(本来就有股票，没有股票，买进)
+  // dp[i][k][0] = max(dp[i - 1][k][0]，dp[i - 1][k][0] + prices[i])
+  // dp[i][k][1] = max(dp[i - 1][k][1]，dp[i - 1][k-1][0] - prices[i])
+  
+  // dp[i][k][0] = Math.max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+  // dp[i][k][1] = Math.max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
+
   //   let n = prices.length;
   //   if (n == 0) {
   //     return 0;
@@ -35,7 +45,7 @@ var maxProfit = function (k, prices) {
   //     }
   //   }
   //   return dp[n - 1][maxTime][0];
-  // 超时了，未什么呢？因为k > n/2 的时候开内存太大了；
+  // 超时了，未什么呢？因为 k > n/2 的时候开内存太大了；
   // 分情况优化解
   let n = prices.length;
   let maxTime = k;

@@ -14,7 +14,7 @@ var rob = function(nums) {
     //dp[1] = nums[0]
     //dp[2] = max(nums[1], nums[0])
     //动态转移方程，最优子结构
-    //dp[i] = max(nums[i] + dp[i-2], dp[i-1])
+    // dp[i] = max(nums[i] + dp[i-2], dp[i-1])
     // let len = nums.length
     // if(!len) return 0
     // let dp = Array(len)
