@@ -323,7 +323,17 @@
       })
   </script> -->
   <!-- <script src="./this.js"></script> -->
-  <script src="./indexOf.js"></script>
+  
+  <script src="./indexOf.js">
+var reverseList = function(head) {
+  //base case
+  if (head == null || head.next == null) return head;
+    let pre = reverseList(head.next);
+    head.next.next = head;
+    head.next = null;
+    return p;
+};
+  </script>
 </body>
-
+   
 </html>

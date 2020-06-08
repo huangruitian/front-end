@@ -820,7 +820,7 @@ const heapify = (i, len, arr) => {
 const createMaxHeap = (arr) => {
   let len = arr.length;
   // heapify(0, len, arr) //不是乱序的数组可以这么来
-  let parent = (len / 2) >> 1;
+  let parent = (len - 1) >> 1;
   // 如果数组乱序必须从最后一个父节点开始全部做heapify
   for (let i = parent; i >= 0; i--) {
     heapify(i, len, arr);

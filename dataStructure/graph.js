@@ -22,16 +22,16 @@
 // 总结：BFS 适合搜索不带权的最短路径，dijkstra是BFS扩展的一种带权值的最短路径算法。适合带权值的搜索
 
 //实现图
-var graph = {
-  "A": ['B', 'C'],
-  "B": ['A', 'C', 'D'],
-  "C": ['A', 'B', 'D', 'E'],
-  "D": ['B', 'C', 'E', 'F'],
-  "E": ['C', 'D'],
-  "F": ['D']
-}
 
-function BFS(graph, s) {
+function BFS(s) {
+  let graph = {
+    "A": ['B', 'C'],
+    "B": ['A', 'C', 'D'],
+    "C": ['A', 'B', 'D', 'E'],
+    "D": ['B', 'C', 'E', 'F'],
+    "E": ['C', 'D'],
+    "F": ['D']
+  }
   let res = []
   //记录已经遍历过的节点
   let map = new Map()
@@ -56,7 +56,15 @@ function BFS(graph, s) {
   return res;
 }
 
-function DFS(graph, s) {
+function DFS(s) {
+  let graph = {
+    "A": ['B', 'C'],
+    "B": ['A', 'C', 'D'],
+    "C": ['A', 'B', 'D', 'E'],
+    "D": ['B', 'C', 'E', 'F'],
+    "E": ['C', 'D'],
+    "F": ['D']
+  }
   let res = []
   //记录已经遍历过的节点
   let map = new Map()
@@ -83,7 +91,15 @@ function DFS(graph, s) {
 
 //BFS扩展，用它求到所有节点的最短路径
 //bfs能得到一颗层级树，这样就可以实现一个点到所有点的最短路径
-function getParent(graph, s) {
+function getParent(s) {
+  let graph = {
+    "A": ['B', 'C'],
+    "B": ['A', 'C', 'D'],
+    "C": ['A', 'B', 'D', 'E'],
+    "D": ['B', 'C', 'E', 'F'],
+    "E": ['C', 'D'],
+    "F": ['D']
+  }
   let parent = {}
   let res = []
   //记录已经遍历过的节点
