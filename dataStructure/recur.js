@@ -197,3 +197,18 @@ var findSubstring = function (s, words) {
   return res;
 }
 // findSubstring("barfoofoobarthefoobarman", ["bar","foo","the"])
+
+const mergeSort = (nums = [1,5,9,7,5,3,4,6,8,2]) => {
+  if(nums.length < 2){
+      return nums
+  }
+  let mid = nums.length >> 1
+  return merge(mergeSort(nums.slice(0, mid)), mergeSort(mid))
+}
+const merge = (left, right) => {
+ let temp = []
+ while(left.length && right.length){
+    temp.push(left[0] > right[0] ? right.shift() : left.shift())
+ }
+ return temp.concat(left.length ? left : right)
+}
