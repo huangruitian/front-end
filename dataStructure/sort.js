@@ -979,7 +979,31 @@ const sort = (
     while (right.length) {
       temp.push(right.shift());
     }
-    return temp
+    return temp;
   };
   return mergeSort(arr);
+};
+
+const mergeSort = (nums = [7, 5, 3, 1, 9, 8, 2, 4, 6, 10]) => {
+  if (nums.length < 2) {
+    return nums;
+  }
+  let mid = nums.length >> 1;
+  return merge(mergeSort(nums.slice(0, mid)), mergeSort(nums.slice(mid)));
+};
+
+const merge = (left, right) => {
+  let result = [];
+  let i = 0,
+    j = 0;
+  while (left.length > i && right.length > j) {
+    result.push(left[i] > right[j] ? right[j++] : left[i++]);
+  }
+  while (left.length > i) {
+    result.push(left[i++]);
+  }
+  while (right.length > j) {
+    result.push(right[j++]);
+  }
+  return result;
 };

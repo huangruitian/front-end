@@ -360,25 +360,114 @@ function DFS(s = 'A') {
 - 这两个算法非常的常用和实用
 
 ### Trie树
-
+- 字典树，搜索引擎搜索的关键字。
 
 ## 基础算法
 ### 递归，非常的重要
-
+1. 特性
+- 递归算法是最基础，也是最重要的算法。
+- 因为递归算法非常适合解决螺旋问题，即大规模问题可以通过小规模问题得到
+- 递归算法一般是自顶向下写，非常适合人类的思考方式
+- 递归优化，可以使用尾递归优化。
+- 递归一般都可以使用memo cache 缓存的技术来加速；这其实就是动态规划
+- 遇到的问题由螺旋规律，都可以用递归解决。
+- 不要抗拒递归，而应该拥抱递归，递归算法写出来的代码是非常简洁的。
+- 切记合理的剪枝和优化，不要一味的傻递归。
+```js
+  function recursion(...args){
+    //1.base case 终止条件，也常叫出口；
+    //2.process 本次递归你要解决的子问题，可能需要计算，组合什么的；
+    //3.call self level 自己调用自己，进入下一层递归；
+    //4.rest state 在第三步的时候可能需要改变一些递归公用的状态，将它们恢复；
+  }
+```
 ### 排序
+- 重点掌握归并，快排（省内存写法），堆排
 
 ### 二分查找
+- 算法很简单，细节是魔鬼
+- 口诀：找左缩右，找右缩左, 边界左加右不加
+- 解释：找左边界，遇到相等先收缩右边界(因为我们要左边界嘛), 右边界同理; 缩左边界时候加一，右边界不加
+- 经典题目，leetcode 34 题
+- 模板
+```js
+// 找左边界
+const findLeft = (nums, target) => {
+  let left = 0;
+  let right = nums.length
+  let mid = 0
+  while(left < right){
+     mid = (right + left) >> 1
+     //收缩右边界  
+     if(nums[mid] >= target){
+       right = mid
+     }else{
+       left = mid + 1
+     }
+  }
+  // 终止的条件是 left == right，此时搜索区间 [left, left)
+  return nums[left] == target ? left : -1
+}
 
+// 找右边界
+const findRight = (nums, target) => {
+  let left = 0;
+  let right = nums.length
+  let mid = 0
+  while(left < right){
+     mid = (right + left) >> 1
+     //收缩左边界  
+     if(nums[mid] <= target){
+       left = mid + 1
+     }else{
+       right = mid
+     }
+  }
+  // 到底没有?
+  return nums[left - 1] == target ? left - 1 : -1
+}
+```
 ### 搜索
-
+- 看图的两个基础算法, BFS 和 DFS
+- 了解 A* 和 迪杰斯特拉算法
 ### 哈希算法
 
 ### 贪心算法
+- 分发饼干
 
 ### 分治算法
+- 分而治之, 往往结合递归写可以很简洁
+- 快排和归并排序
 
 ### 回溯算法
+回溯算法相对简单, 就是固定一个模板, 难在优化剪枝
+```js
+// 路径：记录在 track 中
+// 选择列表：nums 中不存在于 track 的那些元素
+// 结束条件：nums 中的元素全都在 track 中出现
+function backtrack(nums, track = []) {
+    // 触发结束条件
+    if (track.length == nums.length) {
+        res.add([...track]);
+        return;
+    }
+
+    for (let i = 0; i < nums.length; i++) {
+        // 排除不合法的选择, 剪枝
+        if (track.includes(nums[i])){
+          continue;
+        }
+        // 做选择
+        track.push(nums[i]);
+        // 进入下一层决策树
+        backtrack(nums, track);
+        // 取消选择, 回溯
+        track.pop();
+    }
+}
+```
 
 ### 动态规划
-
+- 看之前总结的dp文章, 这个算法是基础算法最难.
 ### 字符串匹配算法
+- 了解kmp算法
