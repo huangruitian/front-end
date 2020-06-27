@@ -243,3 +243,42 @@ function createMaxHeap(nums, n){
 ```
 ### 副本排序法
 - 需要额外的内存副本
+
+2. BFS
+```js
+var isSymmetric = function(root) {
+  //2.BFS，当层如果为空，设置一个#区别一下
+  let queue = [root]
+  while(queue.length){
+     let curLen = queue.length
+     let temp = []
+     while(curLen > 0){
+         curLen--
+         let node = queue.shift() 
+         if(node == null){
+            temp.push('#')  
+         }else{
+            temp.push(node.val)
+            queue.push(node.left)
+            queue.push(node.right)
+         }
+     }
+     if(!vilidate(temp)){
+         return false
+     }
+  }
+  return true
+};
+// 验证是不是对称
+function vilidate(temp){
+     let i = 0, j = temp.length - 1
+     while(i < j){
+        if(temp[i] != temp[j]){
+            return false
+        }
+        i++;
+        j--;
+     }
+     return true
+}
+```

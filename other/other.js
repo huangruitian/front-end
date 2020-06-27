@@ -342,3 +342,33 @@ function backtrack(arr, sum, set, idx) {
   }
 }
 backtrack(R, 0, new Set(), 0)
+
+// 斜线枚举矩阵 
+function enumMartrix(){
+  let martrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+  ]
+  let n = martrix.length
+  let res = []
+  let x = 0
+  let y = n - 1
+  while(y >= 0 && x < n){
+    // 如何控制走呢？
+    let tempX = x
+    let tempY = y
+    // 控制斜线走呗
+    while(tempX < n && tempY < n){
+      res.push(martrix[tempX++][tempY++])
+    }
+    // 当 x < y  时, y -= 1; 往前拉
+    // 当 x >= y 时, x += 1; 往下推
+    if(x < y){
+      y -= 1
+    }else{
+      x += 1
+    } 
+  }
+  return res
+}

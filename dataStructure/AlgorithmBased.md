@@ -146,11 +146,35 @@ let str = "the sky is blue" // -> "blue is sky the"
 ### 二叉树
 1. 特性
 - 最多仅有两个子节点
+```js
+// 二叉树 最近公共祖先
+  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+      if(root == null || root == p || root == q) return root;
+      TreeNode left = lowestCommonAncestor(root.left, p, q);
+      TreeNode right = lowestCommonAncestor(root.right, p, q);
+      if(left == null) return right;
+      if(right == null) return left;
+      return root;
+  }
+```
 2. 二叉树的扩展
 - 平衡二叉树：每个节点的左右子树的高度相差不能大于1，也叫平衡因子。了解四个旋转操作把树拉平
 - 满二叉树：非叶子节点都有左右子树，叶子节点从左往右占满，不留空白。
 - 完全二叉树：在满二叉树的基础上，叶子节点层右边可以空白，左边必须占满。
 - 二叉搜索树(BST)：每个节点的值大于其任意左侧子节点的值，小于其任意右节点的值。平衡的二叉搜索树性能都是log n
+```js
+// BST 最近公共祖先
+  public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    while(root != null) {
+      if(root.val < p.val && root.val < q.val)      // p,q 都在 root 的右子树中
+        root = root.right;                          // 遍历至右子节点
+      else if(root.val > p.val && root.val > q.val) // p,q 都在 root 的左子树中
+        root = root.left;                           // 遍历至左子节点
+      else break;
+    }
+    return root;
+  }
+```
 3. 四个遍历方式
 - 前序遍历
 - 中序遍历
@@ -465,6 +489,38 @@ function backtrack(nums, track = []) {
         track.pop();
     }
 }
+
+// 比较经典的N皇后问题
+var solveNQueens = function (n) {
+  let lie = new Set();
+  let pie = new Set();
+  let na = new Set();
+  let res = [];
+  function backtrack(row, temp = []) {
+    if (row == n) {
+      res.push(temp.map((col) => '.'.repeat(col) + 'Q' + '.'.repeat(n - col - 1)));
+      return
+    } else {
+      for (let col = 0; col < n; col++) {
+        if (lie.has(col) || pie.has(row + col) || na.has(row - col)) {
+          continue;
+        }
+        lie.add(col);
+        pie.add(row + col);
+        na.add(row - col);
+        temp.push(col);
+        // 进入下一行
+        backtrack(row + 1, temp);
+        temp.pop();
+        lie.delete(col);
+        pie.delete(row + col);
+        na.delete(row - col);
+      }
+    }
+  }
+  backtrack(0, []);
+  return res;
+};
 ```
 
 ### 动态规划
